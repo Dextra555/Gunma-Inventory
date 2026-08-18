@@ -1,0 +1,141 @@
+/* ================================================================
+   Gunma GuardForce — Top Navbar (header.component.css)
+   Colour scheme: Navy #00003C  |  Gold #d4af37
+   ================================================================ */
+
+/* ── Wrapper ─────────────────────────────────────────────── */
+.navbar-menu-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px;
+}
+
+/* ── Full nav list ───────────────────────────────────────── */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 17px;
+  margin: 0;
+  list-style: none;
+  gap: 2px;
+}
+
+/* ── Individual nav item ─────────────────────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+/* ── Nav link — DEFAULT state ───────────────────────────── */
+.wlt-c-furg-navbar-nav .nav-item .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  font-size: .95rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 6px;
+  color: #00003C;                      /* navy text */
+  background-color: transparent;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+}
+
+/* icon inside link */
+.wlt-c-furg-navbar-nav .nav-item .nav-link .material-symbols-rounded {
+  font-size: 16px;
+  line-height: 1;
+  color: #00003C;
+  margin-right: 2px;
+  transition: color 0.15s ease;
+}
+
+/* ── Nav link — HOVER state ──────────────────────────────── */
+.wlt-c-furg-navbar-nav .nav-item:hover .nav-link,
+.wlt-c-furg-navbar-nav .nav-item .nav-link:hover {
+  background-color: #00003C;           /* navy block */
+  color: #d4af37 !important;           /* gold text */
+  border-color: #00003C;
+}
+
+.wlt-c-furg-navbar-nav .nav-item:hover .nav-link .material-symbols-rounded,
+.wlt-c-furg-navbar-nav .nav-item .nav-link:hover .material-symbols-rounded {
+  color: #d4af37 !important;           /* gold icon */
+}
+
+/* ── Nav link — ACTIVE state (routerLinkActive="active") ─── */
+.wlt-c-furg-navbar-nav .nav-item .nav-link.active {
+  background-color: #00003C !important; /* solid navy block */
+  color: #d4af37 !important;            /* gold text */
+  border-color: #00003C !important;
+  font-weight: 600;
+}
+
+.wlt-c-furg-navbar-nav .nav-item .nav-link.active .material-symbols-rounded {
+  color: #d4af37 !important;            /* gold icon */
+}
+
+/* ── Toggler (hamburger) ─────────────────────────────────── */
+.navbar-toggler {
+  color: #00003C;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.navbar-toggler:hover {
+  background-color: rgba(0, 0, 60, 0.08);
+}
+
+/* ── User / welcome area ─────────────────────────────────── */
+.wlt-c-furg-welcome-text {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 0.9rem;
+  padding: 2px 5px;
+}
+
+/* ── Dropdown ────────────────────────────────────────────── */
+.wlt-c-furg-dropdown {
+  position: relative;
+}
+.wlt-c-furg-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #e2e2e8;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,60,0.12);
+  min-width: 180px;
+  z-index: 1000;
+  padding: 4px 0;
+}
+.wlt-c-furg-dropdown:hover .wlt-c-furg-dropdown-content {
+  display: block;
+}
+.wlt-c-furg-dropdown-content a {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 13.5px;
+  color: #2b2b3a;
+  text-decoration: none;
+}
+.wlt-c-furg-dropdown-content a:hover {
+  background-color: #f0f0f8;
+  color: #00003C;
+}
