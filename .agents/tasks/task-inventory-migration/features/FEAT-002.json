@@ -1,0 +1,38 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Backend API migration: copy all missing Domain Models (37), DTOs (39+1 replacement), update OBMSDbContext with 38 new DbSet entries, replace IInventoryRepository interface, copy 2 new repository interfaces (IApprovalRepository, INotificationRepository), replace InventoryRepository implementation, copy 2 new implementations (ApprovalRepository, NotificationRepository), copy SignalR NotificationHub, replace InventoryController with full source version, copy 3 new controllers (ApprovalController, StockRequestController, NotificationController), and update Program.cs with SignalR + updated CORS + new DI registrations. This FEAT depends on FEAT-001 (DB tables must exist for EF Core to map correctly).",
+  "status": "pending",
+  "steps": [
+    "Copy 37 missing Domain Model .cs files from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Models\\Domain\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Models\\Domain\\. Files: BrandMaster.cs, UOMMaster.cs, WarehouseMaster.cs, OpeningStock.cs, StockLedger.cs, PurchaseRequisition.cs, PurchaseRequisitionDetail.cs, PRProcessingTask.cs, PurchaseOrder.cs, PurchaseOrderDetail.cs, GoodsReceiptNote.cs, GoodsReceiptNoteDetail.cs, PurchaseReturn.cs, PurchaseReturnDetail.cs, StockIssueDoc.cs, StockIssueDocDetail.cs, StockIssueReturn.cs, StockIssueReturnDetail.cs, StockTransfer.cs, StockTransferDetail.cs, StockAdjustment.cs, StockDamageLoss.cs, StockRequest.cs, StockRequestDetail.cs, StockIssueUniformLoanLink.cs, AppNotification.cs, ApprovalConfiguration.cs, ApprovalHistory.cs, ApprovalRouting.cs, AssetAllocation.cs, AssetDamage.cs, AssetDisposal.cs, AssetLocationLog.cs, AssetMaintenance.cs, AssetMovementHistory.cs, AssetReturn.cs, AssetTransfer.cs. No namespace change needed.",
+    "Copy 39 missing DTO .cs files from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Models\\DTO\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Models\\DTO\\. Also replace AssetMasterRequestDto.cs in target with source version (source has additional fields). Files: ApprovalDto.cs, AssetAllocationRequestDto.cs, AssetDamageRequestDto.cs, AssetDisposalRequestDto.cs, AssetListDto.cs, AssetLocationDto.cs, AssetMaintenanceRequestDto.cs, AssetMasterRequestDto.cs (replace), AssetMovementHistoryDto.cs, AssetReturnRequestDto.cs, AssetTransferRequestDto.cs, BrandMasterRequestDto.cs, EmployeeForIssueDto.cs, EmployeeHoldingDto.cs, EmployeeIssueRegisterDto.cs, GoodsReceiptNoteDto.cs, GRNPaymentRowDto.cs, NotificationDto.cs, OpeningStockListDto.cs, OpeningStockRequestDto.cs, PendingStockIssueDto.cs, PurchaseOrderDto.cs, PurchaseRequisitionDto.cs, PurchaseReturnDto.cs, SAApprovalDto.cs, StockAdjustmentListDto.cs, StockAdjustmentRequestDto.cs, StockBalanceSummaryDto.cs, StockDamageLossListDto.cs, StockDamageLossRequestDto.cs, StockIssueDocListDto.cs, StockIssueDocRequestDto.cs, StockIssueReturnListDto.cs, StockIssueReturnRequestDto.cs, StockLedgerFilterDto.cs, StockRequestDto.cs, StockTransferListDto.cs, StockTransferRequestDto.cs, UOMMasterRequestDto.cs, WarehouseMasterRequestDto.cs",
+    "Edit d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Models\\OBMSDbContext.cs: add 38 DbSet declarations listed in plan.md Phase 2 step 2-C. Do NOT remove any existing DbSets. Add new DbSets just before the protected override void OnModelCreating line.",
+    "Replace d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Repositories\\Interface\\IInventoryRepository.cs with source version from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Repositories\\Interface\\IInventoryRepository.cs",
+    "Copy IApprovalRepository.cs and INotificationRepository.cs from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Repositories\\Interface\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Repositories\\Interface\\",
+    "Replace d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Repositories\\Implementation\\InventoryRepository.cs with source version from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Repositories\\Implementation\\InventoryRepository.cs",
+    "Copy ApprovalRepository.cs and NotificationRepository.cs from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Repositories\\Implementation\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Repositories\\Implementation\\",
+    "Create folder d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Hubs\\ and copy NotificationHub.cs from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Hubs\\",
+    "Replace d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Controllers\\InventoryController.cs with full source version from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Controllers\\InventoryController.cs",
+    "Copy ApprovalController.cs, StockRequestController.cs, and NotificationController.cs from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-API\\OBMS.WebAPI\\Controllers\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Controllers\\",
+    "Edit d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\Program.cs: (a) add 'using OBMS.WebAPI.Hubs;' at top, (b) add INotificationRepository and IApprovalRepository DI registrations BEFORE the IInventoryRepository line, (c) add builder.Services.AddSignalR() after the AddMvc block, (d) replace AllowAnyOrigin() CORS with WithOrigins() list from source Program.cs (add localhost:4200, localhost:5003, and any live Gunma server IPs), (e) add app.MapHub<NotificationHub>(\"/hubs/notifications\") after app.MapControllers(). DO NOT change the JWT key or connection strings.",
+    "Run dotnet build and fix any remaining compilation errors.",
+    "Set FEAT-002 status to 'completed' and record build result in findings."
+  ],
+  "acceptance_criteria": [
+    "dotnet build d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\OBMS.WebAPI.csproj completes with 0 errors",
+    "dotnet run starts the API on port 5003 without error",
+    "GET http://localhost:5003/swagger returns 200 and shows Inventory, Approval, StockRequest, Notification controller endpoints",
+    "GET http://localhost:5003/api/Inventory/GetBrandMasters returns 200 OK",
+    "GET http://localhost:5003/api/Inventory/GetUOMMasters returns 200 OK with 9+ UOM entries",
+    "GET http://localhost:5003/api/Approval/GetApprovalConfigurations returns 200 OK",
+    "GET http://localhost:5003/api/StockRequest/GetBSRList returns 200 OK",
+    "GET http://localhost:5003/api/Inventory/GetInventoryItems returns 200 OK with existing items intact (data not lost)"
+  ],
+  "verification": [
+    "dotnet build \"d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\OBMS.WebAPI.csproj\" — expect 0 errors",
+    "dotnet run --project \"d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\OBMS.WebAPI.csproj\" then curl http://localhost:5003/api/Inventory/GetBrandMasters — expect 200 JSON array",
+    "curl http://localhost:5003/api/Inventory/GetInventoryItems — expect 200 with existing item data (regression check)"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

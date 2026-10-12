@@ -1,0 +1,25 @@
+{
+  "id": "FEAT-001",
+  "type": "chore",
+  "description": "Database schema migration: copy all 27+ idempotent SQL migration scripts from FWG-Malaysia-New to Gunma---Poilt and execute them against OBMSUATNEW. Creates 29 new tables (BrandMaster, UOMMaster, WarehouseMaster, OpeningStock, StockLedger, PurchaseRequisition/Detail, PRProcessingTask, PurchaseOrder/Detail, GoodsReceiptNote/Detail, PurchaseReturn/Detail, StockIssueDoc/Detail, StockIssueReturn/Detail, StockTransfer/Detail, StockAdjustment, StockDamageLoss, AssetAllocation, AssetTransfer, AssetReturn, AssetMaintenance, AssetDamage, AssetDisposal, AssetMovementHistory, AssetLocationLog, ApprovalHistory, ApprovalConfiguration, ApprovalRouting, AppNotification, StockRequest/Detail, StockIssueUniformLoanLink), adds columns to ItemMaster, InventoryCategory, and AssetMaster, inserts ScreenList entries, and seeds UOM reference data.",
+  "status": "pending",
+  "steps": [
+    "Copy all 27 numbered SQL files (01.Inventory_Master_Migration.sql through 27.PRProcessingTask_Migration.sql) and supplemental files (ApprovalRoutingBugFix_Migration.sql, ApprovalRouting_Part7_UserWise_Migration.sql, Fix_PRList_SubmittedBy_Columns.sql, Fix_SupplierInvoiceView_ExcludeGRN.sql) from d:\\Gunma\\FWG-Malaysia-New\\Database\\ to d:\\Gunma\\Gunma---Poilt\\Database\\",
+    "Execute scripts 01 through 27 in numeric order against OBMSUATNEW on DESKTOP-FHKDAA6 using sqlcmd or SSMS. Each script uses IF NOT EXISTS guards and is safe to re-run.",
+    "Execute the 4 supplemental fix scripts after the numbered ones.",
+    "Set FEAT-001 status to 'completed' and record in findings: list of tables created and any errors encountered."
+  ],
+  "acceptance_criteria": [
+    "All 27 numbered SQL scripts execute without error (PRINT output shows 'Completed Successfully' for each)",
+    "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME IN ('BrandMaster','UOMMaster','WarehouseMaster','OpeningStock','StockLedger','PurchaseRequisition','PurchaseOrder','GoodsReceiptNote','PurchaseReturn','StockIssueDoc','StockIssueReturn','StockTransfer','StockAdjustment','StockDamageLoss','AssetAllocation','AssetTransfer','AssetReturn','AssetMaintenance','AssetDamage','AssetDisposal','AssetMovementHistory','AssetLocationLog','ApprovalHistory','ApprovalConfiguration','ApprovalRouting','AppNotification','StockRequest','StockIssueUniformLoanLink') returns 28 rows",
+    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='ItemMaster' AND COLUMN_NAME IN ('Code','BrandID','UOMID','ReorderLevel','ReorderQuantity','WarehouseID') returns 6 rows",
+    "SELECT COUNT(*) FROM UOMMaster WHERE Name IN ('Nos','Pair','Box','Set','Kg','Gram','Litre','Millilitre','Meter') returns 9",
+    "Existing data in ItemMaster, InventoryCategory, Supplier, Recipient, StockIssues, CreditorInvoices is unchanged (row counts unchanged)"
+  ],
+  "verification": [
+    "Run: sqlcmd -S DESKTOP-FHKDAA6 -d OBMSUATNEW -E -Q \"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME IN ('BrandMaster','UOMMaster','WarehouseMaster','OpeningStock','StockLedger','PurchaseRequisition','PurchaseOrder','GoodsReceiptNote','StockIssueDoc','StockTransfer','StockAdjustment','ApprovalHistory','ApprovalRouting','StockRequest')\" — expect 14",
+    "Run: sqlcmd -S DESKTOP-FHKDAA6 -d OBMSUATNEW -E -Q \"SELECT COUNT(*) FROM UOMMaster\" — expect >= 9"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

@@ -1,0 +1,34 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Angular UI migration: copy all 31 missing inventory module folders, update 4 existing modules (asset-master, category-master, item-master, material-issue) with enriched source versions, copy notification.service.ts and signalr-notification.service.ts, extend inventory.service.ts with 75+ new service methods (without removing existing ones), add 62+ new route entries to admin-layout-routing.module.ts, and add all new inventory menu items to sidebar.component.html using the Gunma target CSS/design. This FEAT is independent of FEAT-002 (UI compilation does not require the API to be running), but all service method URLs must match the API endpoints added in FEAT-002.",
+  "status": "pending",
+  "steps": [
+    "Copy all 31 missing inventory module folders from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-UI\\angularapp\\src\\app\\modules\\inventory\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - UI\\angularapp\\src\\app\\modules\\inventory\\. Folders: approval-history, approval-history-dialog, asset-allocation, asset-damage, asset-disposal, asset-location, asset-maintenance, asset-movement-history, asset-return, asset-transfer, branch-stock-request, brand-master, employee-issue-register, employee-item-holding, goods-receipt, inventory-timesheet, notification-list, opening-stock, pending-approvals, purchase-order, purchase-requisition, purchase-return, stock-adjustment, stock-balance-summary, stock-damage-loss, stock-issue, stock-issue-return, stock-ledger, stock-transfer, uom-master, warehouse-master. Copy ALL files in each folder recursively.",
+    "Replace/update 4 existing inventory module folders with richer source versions: asset-master (adds Code/SerialNo/Status fields), category-master (adds ParentCategoryID hierarchy), item-master (adds BrandID/UOMID/WarehouseID/ReorderLevel), material-issue (updated to new StockIssueDoc flow). Source: d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-UI\\angularapp\\src\\app\\modules\\inventory\\<module>\\",
+    "Copy notification.service.ts from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-UI\\angularapp\\src\\app\\service\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - UI\\angularapp\\src\\app\\service\\",
+    "Copy signalr-notification.service.ts from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-UI\\angularapp\\src\\app\\service\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - UI\\angularapp\\src\\app\\service\\. Update any hardcoded hub URL in this file to use the target API at http://localhost:5003 (check if it references an environment variable — if so, ensure environment.ts has the correct baseUrl already set to http://localhost:5003/api/).",
+    "Read the full source inventory.service.ts at d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-UI\\angularapp\\src\\app\\service\\inventory.service.ts. Identify all methods that are NOT in the target inventory.service.ts. Append all missing methods to the END of the target file at d:\\Gunma\\Gunma---Poilt\\Gunma - UI\\angularapp\\src\\app\\service\\inventory.service.ts. Do NOT remove or modify existing methods.",
+    "Read the full source admin-layout-routing.module.ts from d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-UI\\angularapp\\src\\app\\layout\\admin-layout\\admin-layout-routing.module.ts to see what import statements and route entries exist for the new modules. Add all missing import statements and route entries to the TARGET admin-layout-routing.module.ts at d:\\Gunma\\Gunma---Poilt\\Gunma - UI\\angularapp\\src\\app\\layout\\admin-layout\\admin-layout-routing.module.ts. All routes must use canActivate: [AuthGuard].",
+    "Read the current target sidebar.component.html at d:\\Gunma\\Gunma---Poilt\\Gunma - UI\\angularapp\\src\\app\\components\\sidebar\\sidebar.component.html to understand the exact CSS classes, icon library, and HTML structure used for existing inventory menu items. Then read the source sidebar.component.html at d:\\Gunma\\FWG-Malaysia-New\\OBMSAPP-UI\\angularapp\\src\\app\\components\\sidebar\\sidebar.component.html to see which new menu items it has. Add all new inventory menu entries to the target sidebar using the TARGET's CSS classes and design — do not copy source HTML verbatim. New entries cover: Brand Master, UOM Master, Warehouse Master, Opening Stock, Stock Ledger, Purchase Requisition, Purchase Order, Goods Receipt, Purchase Return, Stock Issue, Stock Issue Return, Stock Transfer, Stock Adjustment, Stock Damage/Loss, Stock Balance Summary, Employee Item Holding, Employee Issue Register, Asset Allocation, Asset Transfer, Asset Return, Asset Maintenance, Asset Damage, Asset Disposal, Asset Location, Asset Movement History, Branch Stock Request, Pending Approvals, Approval History, Notifications.",
+    "Run ng build --configuration=development and fix any compilation errors.",
+    "Set FEAT-003 status to 'completed' and record any issues found in findings."
+  ],
+  "acceptance_criteria": [
+    "ng build --configuration=development from d:\\Gunma\\Gunma---Poilt\\Gunma - UI\\angularapp completes with 0 errors",
+    "31 new inventory module folders exist under target modules/inventory/",
+    "inventory.service.ts has methods for all new endpoints (getBrandMasters, getUOMMasters, getWarehouseMasters, getOpeningStockList, getPRList, getPOList, getGRNList, getStockIssueList, getStockTransferList, getAssetAllocationList, getBSRList, getPendingApprovals)",
+    "admin-layout-routing.module.ts has route entries for all 31 new modules",
+    "sidebar.component.html has menu entries for all new inventory sub-modules using Gunma target CSS classes",
+    "ng serve starts without error and navigating to /inventory/brand-master renders the brand master list component",
+    "Existing routes (/inventory/item-master, /inventory/supplier-master, /finance/invoice) still render correctly (no regressions)"
+  ],
+  "verification": [
+    "ng build --configuration=development from d:\\Gunma\\Gunma---Poilt\\Gunma - UI\\angularapp — expect 0 errors",
+    "ng serve --port 4200 then open http://localhost:4200/inventory/brand-master — expect component renders",
+    "Open http://localhost:4200/inventory/item-master — expect existing item list renders (regression check)",
+    "Open browser developer console — expect 0 TypeScript/Angular errors on page load for new routes"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

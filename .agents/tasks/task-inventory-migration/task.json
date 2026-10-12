@@ -1,0 +1,7 @@
+{
+  "task_id": "task-inventory-migration",
+  "task_description": "Migrate the complete Inventory module from FWG-Malaysia-New into Gunma---Poilt. Covers DB schema, backend API (controllers/repos/models), Angular UI (31 new modules + service methods + routing + sidebar), Crystal Reports, and full build/smoke-test verification.",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004"],
+  "blocked_reason": null
+}

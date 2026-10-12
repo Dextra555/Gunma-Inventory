@@ -1,0 +1,21 @@
+Running migration scripts...
+[0] 15.ApprovalSystem_BugFix_Migration.sql
+[0] 16.StockAdjustment_ApprovalWorkflow_Migration.sql
+[0] 17.StockLedgerReport_Migration.sql
+[0] 18.AssetDisposal_ApprovalWorkflow_Migration.sql
+[0] 19.GRN_CreditorInvoice_Backfill_Migration.sql
+[0] 20.TransactionPDFReports_Migration.sql
+[0] 20a.TransactionPDFReports_Fix.sql
+[0] 21.StockIssuePDFReport_Migration.sql
+[0] 22.IssueReturnPDFReport_Migration.sql
+[0] 23.StockTransferPDFReport_Migration.sql
+[0] 24.StockAdjustmentPDFReport_Migration.sql
+[0] 25.AssetPDFReports_Migration.sql
+[0] 26.PRDepartmentNotification_Migration.sql
+[0] 27.PRProcessingTask_Migration.sql
+[0] ApprovalRoutingBugFix_Migration.sql
+[0] ApprovalRouting_Part7_UserWise_Migration.sql
+[0] Fix_PRList_SubmittedBy_Columns.sql
+[0] Fix_SupplierInvoiceView_ExcludeGRN.sql
+
+All scripts completed.

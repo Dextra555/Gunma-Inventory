@@ -1,0 +1,47 @@
+{
+  "id": "FEAT-004",
+  "type": "feat",
+  "description": "Crystal Reports migration and full integration verification: copy 17 missing .rpt and .aspx report files from source Inventory report folder to target, update database connection strings in all .aspx.cs files to point to OBMSUATNEW on DESKTOP-FHKDAA6, then run full end-to-end smoke tests with both API and Angular running to confirm the complete migration works. This FEAT depends on FEAT-001 (DB), FEAT-002 (API), and FEAT-003 (UI) being completed first.",
+  "status": "pending",
+  "steps": [
+    "Copy 17 missing report files from d:\\Gunma\\FWG-Malaysia-New\\UatReports-new\\UatReports\\Inventory\\ to d:\\Gunma\\Gunma---Poilt\\Gunma - Report\\Inventory\\. Files: AssetAllocationReport.aspx, AssetDamageReport.aspx, AssetDisposalReport.aspx, AssetMaintenanceReport.aspx, AssetMasterReport.aspx, AssetReturnReport.aspx, AssetTransferReport.aspx, BSRReport.aspx, GRNReport.aspx, IssueReturnReport.aspx, POReport.aspx, PRReport.aspx, StockAdjustmentReport.aspx, StockIssueReport.aspx, StockLedger.rpt, StockLedgerReport.aspx, StockTransferReport.aspx. Copy the corresponding .aspx.cs code-behind files as well.",
+    "Read each copied .aspx.cs file and find the database connection string or connection setup code. Replace any connection string pointing to the source server/database with: Data Source=DESKTOP-FHKDAA6;Initial Catalog=OBMSUATNEW;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connect Timeout=30",
+    "Check the two existing target .aspx.cs files (HQStockLedger.aspx.cs and BranchStockLedgerReport.aspx.cs) to confirm they already point to OBMSUATNEW — update if they don't.",
+    "Run full API smoke tests: start API with 'dotnet run --project \"d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\OBMS.WebAPI.csproj\"'. Test the following endpoints (all must return 200): GET /api/Inventory/GetBrandMasters, GET /api/Inventory/GetUOMMasters, GET /api/Inventory/GetWarehouseMasters, GET /api/Inventory/GetOpeningStockList, GET /api/Inventory/GetPRList, GET /api/Inventory/GetPOList, GET /api/Inventory/GetGRNList, GET /api/Inventory/GetPurchaseReturnList, GET /api/Inventory/GetStockIssueList, GET /api/Inventory/GetStockIssueReturnList, GET /api/Inventory/GetStockTransferList, GET /api/Inventory/GetStockAdjustmentList, GET /api/Inventory/GetStockDamageLossList, GET /api/Inventory/GetStockBalanceSummary, GET /api/Inventory/GetAssetList, GET /api/Inventory/GetAssetAllocationList?activeOnly=true, GET /api/Approval/GetPendingApprovals (may return 401 without token — that is correct), GET /api/StockRequest/GetBSRList (may return 401 without token — that is correct), GET /api/Inventory/GetInventoryItems (regression — must return existing data).",
+    "Run full Angular smoke tests: start 'ng serve --port 4200' and navigate to 12 key routes listed in acceptance criteria. Confirm each renders without browser console errors.",
+    "Set FEAT-004 status to 'completed' and record all smoke test results in findings."
+  ],
+  "acceptance_criteria": [
+    "17 new report files are present in d:\\Gunma\\Gunma---Poilt\\Gunma - Report\\Inventory\\",
+    "All .aspx.cs files in d:\\Gunma\\Gunma---Poilt\\Gunma - Report\\Inventory\\ reference OBMSUATNEW on DESKTOP-FHKDAA6",
+    "GET /api/Inventory/GetBrandMasters returns 200",
+    "GET /api/Inventory/GetUOMMasters returns 200 with >= 9 UOM entries",
+    "GET /api/Inventory/GetOpeningStockList returns 200",
+    "GET /api/Inventory/GetPRList returns 200",
+    "GET /api/Inventory/GetPOList returns 200",
+    "GET /api/Inventory/GetGRNList returns 200",
+    "GET /api/Inventory/GetStockIssueList returns 200",
+    "GET /api/Inventory/GetStockTransferList returns 200",
+    "GET /api/Inventory/GetAssetAllocationList?activeOnly=true returns 200",
+    "GET /api/Inventory/GetStockBalanceSummary returns 200",
+    "GET /api/Inventory/GetInventoryItems returns 200 with existing items (regression)",
+    "Angular route /inventory/brand-master renders the brand master list",
+    "Angular route /inventory/opening-stock renders the opening stock list",
+    "Angular route /inventory/purchase-requisition renders the PR list",
+    "Angular route /inventory/goods-receipt renders the GRN list",
+    "Angular route /inventory/stock-issue renders the stock issue list",
+    "Angular route /inventory/asset-allocation renders the asset allocation list",
+    "Angular route /inventory/pending-approvals renders the pending approvals component",
+    "Angular route /inventory/branch-stock-request renders the BSR list",
+    "Angular route /inventory/item-master still works with existing data (regression)",
+    "Angular route /finance/invoice still works (regression)",
+    "Sidebar shows all new inventory menu entries and they navigate correctly"
+  ],
+  "verification": [
+    "dotnet run --project \"d:\\Gunma\\Gunma---Poilt\\Gunma - API\\OBMS.WebAPI\\OBMS.WebAPI.csproj\" then run: for each endpoint in acceptance criteria, curl http://localhost:5003/api/... — expect 200 for public endpoints",
+    "ng serve --port 4200 then manually navigate to each Angular route in acceptance criteria and confirm page renders without console errors",
+    "Open /inventory/item-master and confirm existing item data is visible (regression guard)"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
