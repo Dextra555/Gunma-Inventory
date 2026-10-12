@@ -90,6 +90,52 @@ public partial class OBMSDbContext : DbContext
     public virtual DbSet<DebitNote> DebitNotes { get; set; }
     public DbSet<AttendanceDisplayResult> AttendanceDisplayResults { get; set; }
     public DbSet<EmployeeVisaPassportListView> EmployeeVisaPassportListViews { get; set; }
+
+    // Inventory Module — Domain Sets
+    public virtual DbSet<BrandMaster> BrandMasters { get; set; }
+    public virtual DbSet<UOMMaster> UOMMasters { get; set; }
+    public virtual DbSet<WarehouseMaster> WarehouseMasters { get; set; }
+    public DbSet<OpeningStock> OpeningStocks { get; set; }
+    public DbSet<StockLedger> StockLedgers { get; set; }
+    public DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
+    public DbSet<PurchaseRequisitionDetail> PurchaseRequisitionDetails { get; set; }
+    public DbSet<PRProcessingTask> PRProcessingTasks { get; set; }
+    public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+    public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+    public DbSet<GoodsReceiptNote> GoodsReceiptNotes { get; set; }
+    public DbSet<GoodsReceiptNoteDetail> GoodsReceiptNoteDetails { get; set; }
+    public DbSet<PurchaseReturn> PurchaseReturns { get; set; }
+    public DbSet<PurchaseReturnDetail> PurchaseReturnDetails { get; set; }
+    public DbSet<AssetAllocation> AssetAllocations { get; set; }
+    public DbSet<AssetTransfer> AssetTransfers { get; set; }
+    public DbSet<AssetReturn> AssetReturns { get; set; }
+    public DbSet<AssetMaintenance> AssetMaintenances { get; set; }
+    public DbSet<AssetDamage> AssetDamages { get; set; }
+    public DbSet<AssetDisposal> AssetDisposals { get; set; }
+    public DbSet<AssetMovementHistory> AssetMovementHistories { get; set; }
+    public DbSet<AssetLocationLog> AssetLocationLogs { get; set; }
+    public DbSet<ApprovalHistory> ApprovalHistories { get; set; }
+    public DbSet<ApprovalConfiguration> ApprovalConfigurations { get; set; }
+    public DbSet<AppNotification> AppNotifications { get; set; }
+    public DbSet<ApprovalRouting> ApprovalRoutings { get; set; }
+    public DbSet<StockIssueDoc> StockIssueDocs { get; set; }
+    public DbSet<StockIssueDocDetail> StockIssueDocDetails { get; set; }
+    public DbSet<StockIssueReturn> StockIssueReturns { get; set; }
+    public DbSet<StockIssueReturnDetail> StockIssueReturnDetails { get; set; }
+    public DbSet<StockTransfer> StockTransfers { get; set; }
+    public DbSet<StockTransferDetail> StockTransferDetails { get; set; }
+    public DbSet<StockAdjustment> StockAdjustments { get; set; }
+    public DbSet<StockDamageLoss> StockDamageLosses { get; set; }
+    public DbSet<StockRequest> StockRequests { get; set; }
+    public DbSet<StockRequestDetail> StockRequestDetails { get; set; }
+    public DbSet<StockIssueUniformLoanLink> StockIssueUniformLoanLinks { get; set; }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        // Suppress decimal precision warnings - apply decimal(18,4) to all decimal properties globally
+        configurationBuilder.Properties<decimal>().HaveColumnType("decimal(18,4)");
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BranchPaymentForBranch>().ToTable("BranchPaymentsForBranch");
