@@ -5,6 +5,7 @@ using OBMS.WebAPI.Models;
 using OBMS.WebAPI.Repositories.Implementation;
 using OBMS.WebAPI.Repositories.Interface;
 using OBMS.WebAPI.BusinessObjects;
+using OBMS.WebAPI.Hubs;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +19,8 @@ builder.Configuration
         reloadOnChange: true);
 
 // JWT Key
-var key = Encoding.ASCII.GetBytes("obms-authentication");
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "obms-authentication-secret-key-32chars!!";
+var key = Encoding.ASCII.GetBytes(jwtKey);
 
 // Database Connection
 builder.Services.AddDbContext<OBMSDbContext>(options =>
@@ -43,11 +45,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency Injection
+// NOTE: NotificationRepository + ApprovalRepository must be registered BEFORE
+// InventoryRepository because InventoryRepository depends on them.
 builder.Services.AddScoped<IRegisterRepository, RegisterRepository>();
 builder.Services.AddScoped<IMasterRepository, MasterRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IPayrollRepository, PayrollRepository>();
 builder.Services.AddScoped<IAgreementRepository, AgreementRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IApprovalRepository, ApprovalRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IFinanceRepository, FinanceRepository>();
 builder.Services.AddScoped<ISalaryProcess, SalaryProcess>();
@@ -55,6 +61,9 @@ builder.Services.AddScoped<IAccountingRepository, AccountingRepository>();
 builder.Services.AddScoped<ICreditDebitNoteRepository, CreditDebitNoteRepository>();
 
 // JWT Authentication
+// SignalR sends the token as a query-string parameter (?access_token=...)
+// because WebSockets cannot set Authorization headers.
+// We read it from the query string and forward it as the bearer token.
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,12 +77,33 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "yourapi.com",
-        ValidAudience = "yourapi.com",
+        ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "yourapi.com",
+        ValidAudience = builder.Configuration["Jwt:Audience"] ?? "yourapi.com",
         IssuerSigningKey = new SymmetricSecurityKey(key),
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.FromMinutes(5)
+    };
+
+    // Allow the token to come from the query string for SignalR WebSocket connections
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            // Only apply the query-string token to the SignalR hub endpoint
+            if (!string.IsNullOrEmpty(accessToken) &&
+                path.StartsWithSegments("/hubs/notifications"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
+
+// SignalR — real-time notification delivery
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -81,14 +111,29 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// HTTPS
-app.UseHttpsRedirection();
+// HTTPS redirect — disable if IIS site is HTTP-only
+// app.UseHttpsRedirection();
 
 // CORS
+// AllowAnyOrigin() cannot be used with AllowCredentials() (required for SignalR).
+// So we explicitly list all known origins — local dev + live IIS server.
 app.UseCors(policy =>
-    policy.AllowAnyOrigin()
+    policy.WithOrigins(
+            "http://localhost:4200",           // Angular local dev (default)
+            "http://localhost:4300",           // Angular local dev (alternate)
+            "http://localhost:65015",          // Angular local dev (this session)
+            "http://localhost:5002",           // API self / Swagger
+            "http://localhost:5003",           // Poilt API alternate
+            "http://124.217.236.37",           // Live server (bare port 80)
+            "http://124.217.236.37:64488",     // FWG Live Angular app
+            "http://124.217.236.37:64499",     // FWG Live API
+            "http://124.217.236.37:8008",      // FWG Report server
+            "http://124.217.236.37:8227",      // UAT Angular (Poilt)
+            "http://124.217.236.37:8484"       // IND Angular
+          )
           .AllowAnyMethod()
-          .AllowAnyHeader());
+          .AllowAnyHeader()
+          .AllowCredentials());
 
 // Authentication & Authorization
 app.UseAuthentication();
@@ -96,5 +141,8 @@ app.UseAuthorization();
 
 // Controllers
 app.MapControllers();
+
+// SignalR hub endpoint
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 app.Run();

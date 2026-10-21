@@ -379,7 +379,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -425,7 +425,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
 
@@ -467,7 +467,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -508,7 +508,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -529,7 +529,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
     }

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OBMS.WebAPI.Models;
@@ -350,7 +350,7 @@ namespace OBMS.WebAPI.Repositories.Implementation
 
             return newVoucherNo.ToString("000000");
         }
-        public List<ItemMasterDto> GetUniformItemRows(int AdvanceID, int Category)
+        public List<EmployeeItemIssueListDto> GetUniformItemRows(int AdvanceID, int Category)
         {
             // When AdvanceID = 0 (new record), skip the join � return all items with Quantity 0
             if (AdvanceID == 0)
@@ -358,7 +358,7 @@ namespace OBMS.WebAPI.Repositories.Implementation
                 return _oBMSDbContext.ItemMasters
                     .Where(im => im.CategoryID == Category)
                     .OrderBy(im => im.Name)
-                    .Select(im => new ItemMasterDto
+                    .Select(im => new EmployeeItemIssueListDto
                     {
                         ID = 0,
                         AdvanceID = 0,
@@ -377,7 +377,7 @@ namespace OBMS.WebAPI.Repositories.Implementation
                             into itemIssueGroup
                         from employeeItemIssue in itemIssueGroup.DefaultIfEmpty()
                         where itemMaster.CategoryID == Category
-                        select new ItemMasterDto
+                        select new EmployeeItemIssueListDto
                         {
                             ID = employeeItemIssue != null ? employeeItemIssue.ID : 0,
                             AdvanceID = employeeItemIssue != null ? employeeItemIssue.AdvanceID : 0,
@@ -634,6 +634,22 @@ namespace OBMS.WebAPI.Repositories.Implementation
                              .Where(sa => sa.ID == id && sa.TransType == transType && sa.IsDeleted == false)
                              .FirstOrDefaultAsync();
         }
+
+        public async Task<bool> GetSalaryAdvanceDuplicateAsync(
+            int employeeId, DateTime advanceTakenDate, string? voucherNo,
+            decimal amount, int transType, DateTime cutoff)
+        {
+            return await _oBMSDbContext.SalaryAdvances
+                .AnyAsync(sa =>
+                    sa.IsDeleted == false &&
+                    sa.EmployeeID == employeeId &&
+                    sa.AdvanceTakenDate == advanceTakenDate &&
+                    sa.VoucherNo == voucherNo &&
+                    sa.Amount == amount &&
+                    sa.TransType == transType &&
+                    sa.LastUpdate >= cutoff);
+        }
+
         #region Attendance
 
         public ActionResult<IEnumerable<ClientMaster>> GetClients(DateTime period, string branchCode)

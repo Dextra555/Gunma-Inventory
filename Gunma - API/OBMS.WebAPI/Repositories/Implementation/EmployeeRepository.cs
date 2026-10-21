@@ -598,7 +598,7 @@ namespace OBMS.WebAPI.Repositories.Implementation
 
             if (string.IsNullOrEmpty(latestCode))
             {
-                return "GUN" + 1.ToString("D6");
+                return "FWGG" + 1.ToString("D6");
             }
 
             var match = Regex.Match(latestCode, "^(.*?)(\\d+)$");

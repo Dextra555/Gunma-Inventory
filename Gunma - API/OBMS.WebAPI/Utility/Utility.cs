@@ -53,7 +53,7 @@
         {
             var results = new Dictionary<string, string>();
 
-            results.Add("ShortName", "GUNS");
+            results.Add("ShortName", "FWG");
 
             return results;
         }

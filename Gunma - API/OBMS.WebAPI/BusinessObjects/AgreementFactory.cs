@@ -177,7 +177,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public void Get(string Branch, string Client, DateTime AgreementPeriod)
@@ -221,7 +221,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public void Get(decimal ID)
@@ -256,7 +256,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
 
@@ -289,7 +289,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -316,7 +316,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -350,7 +350,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
     }

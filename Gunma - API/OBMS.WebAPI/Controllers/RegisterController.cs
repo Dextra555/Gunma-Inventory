@@ -21,11 +21,13 @@ namespace OBMS.WebAPI.Controllers
         Dictionary<string, object> dictResult = new Dictionary<string, object>();
         private readonly IRegisterRepository _registerRepository;
         private readonly OBMSDbContext _dbContext;
+        private readonly IConfiguration _configuration;
 
-        public RegisterController(IRegisterRepository registerRepository, OBMSDbContext dbContext)
+        public RegisterController(IRegisterRepository registerRepository, OBMSDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _registerRepository = registerRepository;
+            _configuration = configuration;
         }
 
         // POST: api/Register
@@ -52,7 +54,8 @@ namespace OBMS.WebAPI.Controllers
                     IsView = requestDto.IsView,
                     LastUpdatedBy = requestDto?.LastUpdatedBy,
                     LastUpdatedDate = DateTime.Now,
-                    Password = requestDto.Password
+                    Password = requestDto.Password,
+                    Department = requestDto.Department
                 };
                 await _registerRepository.RegisterAsync(userRegister);
 
@@ -86,11 +89,18 @@ namespace OBMS.WebAPI.Controllers
         {
             try
             {
+                if (loginUser == null || string.IsNullOrWhiteSpace(loginUser.userName) || string.IsNullOrWhiteSpace(loginUser.password))
+                {
+                    dictResult.Add("Failure", "Failure");
+                    dictResult.Add("Users", new { });
+                    dictResult.Add("Message", "Login failed please check your login details....");
+                    return Ok(dictResult);
+                }
+
                 var obmsUser = new Obmsuser
                 {
-                    Name = loginUser.userName,
-                    Password = loginUser.password
-
+                    Name = loginUser.userName.Trim(),
+                    Password = loginUser.password.Trim()
                 };
 
                 var userAvailable = await _registerRepository.LoginUser(obmsUser);
@@ -98,13 +108,25 @@ namespace OBMS.WebAPI.Controllers
                 if (userAvailable != null)
                 {
                     var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = Encoding.ASCII.GetBytes("obms-authentication");
+                    var jwtKey = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured in appsettings.");
+                    var key = Encoding.ASCII.GetBytes(jwtKey);
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(new[] {
-                                  new Claim(ClaimTypes.Name, loginUser.userName)
+                                  // FIX: use userAvailable.Name (exact DB value) not loginUser.userName
+                                  // (typed input). This ensures JWT username always matches OBMSUsers.Name
+                                  // exactly, so ApprovalRouting lookups (which compare against OBMSUsers.Name)
+                                  // always find the correct row regardless of how the user typed their name.
+                                  new Claim(ClaimTypes.Name, userAvailable.Name),
+                                  // BUG-01 FIX: carry the user's role level in the JWT so that backend
+                                  // can determine SuperAdmin (IsAdmin='2') without a DB lookup on
+                                  // every request.  This eliminates all hard-coded "superadmin" string
+                                  // comparisons in the approval flow.
+                                  new Claim("IsAdmin", userAvailable.IsAdmin ?? "0")
                         }),
-                        Expires = DateTime.UtcNow.AddMinutes(60),  // Token expires in 15 mins
+                        Issuer = _configuration["Jwt:Issuer"] ?? "yourapi.com",
+                        Audience = _configuration["Jwt:Audience"] ?? "yourapi.com",
+                        Expires = DateTime.UtcNow.AddHours(8),  // Token expires in 8 hours
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                     };
                     var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -579,8 +601,7 @@ namespace OBMS.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                // Handle exceptions appropriately
-                return StatusCode(500, "An error occurred while processing the request.");
+                return StatusCode(500, $"An error occurred while processing the request: {ex.Message}");
             }
         }
 

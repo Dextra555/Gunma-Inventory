@@ -187,7 +187,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public static List<AuditTrailFactory> GetList(DateTime DateFrom, DateTime DateTo)
@@ -269,7 +269,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public static List<AuditTrailFactory> GetList(string ActionBy, DateTime DateFrom, DateTime DateTo)
@@ -353,7 +353,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public static List<AuditTrailFactory> GetList(string ActionBy, string Module, DateTime DateFrom, DateTime DateTo)
@@ -439,7 +439,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public static List<AuditTrailFactory> GetList(string ActionBy, string Module, string Action, DateTime DateFrom, DateTime DateTo)
@@ -527,7 +527,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public bool Add(string CurrentUser)
@@ -555,7 +555,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public bool Add(string CurrentUser, string UserType, string Branch, string Module, string Action, string Details, string Description)
@@ -583,7 +583,7 @@ namespace OBMS.WebAPI.BusinessObjects
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
     }

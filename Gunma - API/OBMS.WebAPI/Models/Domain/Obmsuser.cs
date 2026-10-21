@@ -55,4 +55,8 @@ public partial class Obmsuser
     [StringLength(100)]
     [Unicode(false)]
     public string? ContactNo { get; set; }
+
+    [StringLength(200)]
+    [Unicode(false)]
+    public string? Department { get; set; }
 }

@@ -11,6 +11,7 @@ namespace OBMS.WebAPI.Models.Domain
         public decimal PaymentID { get; set; }
         public string Branch { get; set; }
         public decimal? InvoiceID { get; set; }
+        public int? GRNID { get; set; }
         public decimal Amount { get; set; }
         public DateTime LastUpdate { get; set; }
         public string LastUpdatedBy { get; set; }

@@ -33,5 +33,7 @@ namespace OBMS.WebAPI.Models.DTO
         public string? Email { get; set; }
        
         public string? ContactNo { get; set; }
+
+        public string? Department { get; set; }
     }
 }

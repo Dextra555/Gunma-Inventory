@@ -324,7 +324,7 @@ namespace OBMS.WebAPI.Repositories.Implementation
                 .Max();
             var newClientCode = result + 1;
 
-            return newClientCode.ToString("GUNC000000");
+            return newClientCode.ToString("FwgC000000");
         }
         #endregion
 
@@ -756,7 +756,7 @@ namespace OBMS.WebAPI.Repositories.Implementation
                 .Max();
             var newClientCode = result + 1;
 
-            return newClientCode.ToString("GUN000");
+            return newClientCode.ToString("FWG000");
         }
 
         #region Master Reports

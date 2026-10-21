@@ -41,6 +41,9 @@ public partial class OBMSDbContext : DbContext
     public DbSet<EmployeeItemIssue> EmployeeItemIssues { get; set; }
     public virtual DbSet<SalaryAdvance> SalaryAdvances { get; set; }
     public DbSet<InventoryCategory> InventoryCategories { get; set; }
+    public virtual DbSet<BrandMaster> BrandMasters { get; set; }
+    public virtual DbSet<UOMMaster> UOMMasters { get; set; }
+    public virtual DbSet<WarehouseMaster> WarehouseMasters { get; set; }
     public DbSet<ItemMaster> ItemMasters { get; set; }
     public DbSet<PaySlip> PaySlips { get; set; }
     public DbSet<MiscTrans> MiscTrans { get; set; }
@@ -91,12 +94,11 @@ public partial class OBMSDbContext : DbContext
     public DbSet<AttendanceDisplayResult> AttendanceDisplayResults { get; set; }
     public DbSet<EmployeeVisaPassportListView> EmployeeVisaPassportListViews { get; set; }
 
-    // Inventory Module — Domain Sets
-    public virtual DbSet<BrandMaster> BrandMasters { get; set; }
-    public virtual DbSet<UOMMaster> UOMMasters { get; set; }
-    public virtual DbSet<WarehouseMaster> WarehouseMasters { get; set; }
+    // Part 2: Opening Stock + Stock Ledger
     public DbSet<OpeningStock> OpeningStocks { get; set; }
     public DbSet<StockLedger> StockLedgers { get; set; }
+
+    // Part 3: Purchase Flow
     public DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
     public DbSet<PurchaseRequisitionDetail> PurchaseRequisitionDetails { get; set; }
     public DbSet<PRProcessingTask> PRProcessingTasks { get; set; }
@@ -106,6 +108,8 @@ public partial class OBMSDbContext : DbContext
     public DbSet<GoodsReceiptNoteDetail> GoodsReceiptNoteDetails { get; set; }
     public DbSet<PurchaseReturn> PurchaseReturns { get; set; }
     public DbSet<PurchaseReturnDetail> PurchaseReturnDetails { get; set; }
+
+    // Part 6: Asset Management
     public DbSet<AssetAllocation> AssetAllocations { get; set; }
     public DbSet<AssetTransfer> AssetTransfers { get; set; }
     public DbSet<AssetReturn> AssetReturns { get; set; }
@@ -114,10 +118,15 @@ public partial class OBMSDbContext : DbContext
     public DbSet<AssetDisposal> AssetDisposals { get; set; }
     public DbSet<AssetMovementHistory> AssetMovementHistories { get; set; }
     public DbSet<AssetLocationLog> AssetLocationLogs { get; set; }
+
+    // Part 7: Approval Workflow + Notifications
     public DbSet<ApprovalHistory> ApprovalHistories { get; set; }
     public DbSet<ApprovalConfiguration> ApprovalConfigurations { get; set; }
     public DbSet<AppNotification> AppNotifications { get; set; }
+    // Part 7 User-Wise Routing
     public DbSet<ApprovalRouting> ApprovalRoutings { get; set; }
+
+    // Part 4: Stock Operations
     public DbSet<StockIssueDoc> StockIssueDocs { get; set; }
     public DbSet<StockIssueDocDetail> StockIssueDocDetails { get; set; }
     public DbSet<StockIssueReturn> StockIssueReturns { get; set; }
@@ -126,18 +135,28 @@ public partial class OBMSDbContext : DbContext
     public DbSet<StockTransferDetail> StockTransferDetails { get; set; }
     public DbSet<StockAdjustment> StockAdjustments { get; set; }
     public DbSet<StockDamageLoss> StockDamageLosses { get; set; }
+
+    // Part 9: Branch Stock Request
     public DbSet<StockRequest> StockRequests { get; set; }
     public DbSet<StockRequestDetail> StockRequestDetails { get; set; }
-    public DbSet<StockIssueUniformLoanLink> StockIssueUniformLoanLinks { get; set; }
 
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-    {
-        // Suppress decimal precision warnings - apply decimal(18,4) to all decimal properties globally
-        configurationBuilder.Properties<decimal>().HaveColumnType("decimal(18,4)");
-    }
+    // Stock Issue → Uniform Loan link table
+    public DbSet<StockIssueUniformLoanLink> StockIssueUniformLoanLinks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Global convention: set decimal(18,4) for all decimal properties to suppress EF Core warnings
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                if (property.ClrType == typeof(decimal) || property.ClrType == typeof(decimal?))
+                {
+                    property.SetColumnType("decimal(18,4)");
+                }
+            }
+        }
+
         modelBuilder.Entity<BranchPaymentForBranch>().ToTable("BranchPaymentsForBranch");
         modelBuilder.Entity<PayToView>().ToTable("PayToView");
         modelBuilder.Entity<SupplierInvoiceView>().ToTable("SupplierInvoiceView");
@@ -151,8 +170,7 @@ public partial class OBMSDbContext : DbContext
         modelBuilder.Entity<QueryResult>().HasNoKey().ToView(null);
         modelBuilder.Entity<AttendanceDisplayResult>().HasNoKey().ToView(null);
         modelBuilder.Entity<EmployeeVisaPassportListView>().HasNoKey().ToView(null);
-        modelBuilder.Entity<AgreementDetails>(entity =>entity.Property(e => e.Rate).HasColumnType("decimal(18,4)"));
+        modelBuilder.Entity<AgreementDetails>(entity => entity.Property(e => e.Rate).HasColumnType("decimal(18,4)"));
         modelBuilder.Entity<ClientInvoiceDetail>().Property(p => p.Rate).HasColumnType("decimal(18,4)");
-
     }
 }
