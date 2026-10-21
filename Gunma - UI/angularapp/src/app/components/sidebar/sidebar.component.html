@@ -1,7 +1,12 @@
 <nav class="wlt-c-furg-sidebar wlt-c-furg-sidebar-offcanvas" id="sidebar">
-  <div class="navbar-brand-wrapper" style="width:235px; height:95px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-    <a class="navbar-brand brand-logo mr-0" style="padding:0; margin:0; background:none;">
-      <img src="assets/img/GunmaGuardForce-removebg.png" class="logo-image" alt="Gunma Guard Force">
+  <div class="navbar-brand-wrapper" style="width: 235px;height:95px;">
+    <a class="navbar-brand brand-logo mr-0">
+      <!-- UAT server logo -->
+      <!-- <img src="assets/img/logo-sample.png" alt="" /> -->
+      <!-- fwg server logo -->
+      <!-- <img src="assets/img/logo-white.png"> -->
+      <!-- Gunma logo -->
+      <img src="assets/img/GunmaGuardForce-removebg.png" alt="Gunma Guard Force" style="max-height:80px; width:auto;">
     </a>
   </div>
   <ul class="nav">
@@ -82,10 +87,42 @@
             <div class="collapse" [ngClass]="{'show': isSubmenuOpen('inventory')}">
               <ul class="nav flex-column wlt-c-furg-sub-menu">              
                 <li class="nav-item" routerLink="/inventory/item-master"><a class="nav-link">Item Master </a></li>
+                <li class="nav-item" routerLink="/inventory/brand-master"><a class="nav-link">Brand Master</a></li>
+                <li class="nav-item" routerLink="/inventory/uom-master"><a class="nav-link">UOM Master</a></li>
+                <li class="nav-item" routerLink="/inventory/warehouse-master"><a class="nav-link">Warehouse Master</a></li>
+                <li class="nav-item" routerLink="/inventory/opening-stock"><a class="nav-link">Opening Stock</a></li>
+                <li class="nav-item" routerLink="/inventory/purchase-requisition"><a class="nav-link">Purchase Requisition</a></li>
+                <li class="nav-item" routerLink="/inventory/purchase-order"><a class="nav-link">Purchase Order</a></li>
+                <li class="nav-item" routerLink="/inventory/goods-receipt"><a class="nav-link">Goods Receipt</a></li>
+                <li class="nav-item" routerLink="/inventory/purchase-return"><a class="nav-link">Purchase Return</a></li>
+                <!-- Part 4: Stock Operations -->
+                <li class="nav-item">
+                  <span class="reportHeader">
+                    <a class="nav-link collapsed reportHeader">Stock Operations</a>
+                  </span>
+                </li>
+                <li class="nav-item" routerLink="/inventory/stock-issue"><a class="nav-link">Stock Issue</a></li>
+                <li class="nav-item" routerLink="/inventory/stock-issue-return"><a class="nav-link">Issue Return</a></li>
+                <li class="nav-item" routerLink="/inventory/stock-transfer"><a class="nav-link">Stock Transfer</a></li>
+                <li class="nav-item" routerLink="/inventory/branch-stock-request"><a class="nav-link">Branch Stock Request</a></li>
+                <li class="nav-item" routerLink="/inventory/stock-adjustment"><a class="nav-link">Stock Adjustment</a></li>
+                <li class="nav-item" routerLink="/inventory/stock-damage-loss"><a class="nav-link">Damage / Loss</a></li>
+                <!-- Part 6: Asset Management -->
+                <li class="nav-item">
+                  <span class="reportHeader">
+                    <a class="nav-link collapsed reportHeader">Asset Management</a>
+                  </span>
+                </li>
                 <li class="nav-item" routerLink="/inventory/asset-master"><a class="nav-link">Asset Master</a></li>
-                <li class="nav-item" routerLink="/inventory/recepient-master"><a class="nav-link">Recepient Master</a></li>
-                <li class="nav-item" routerLink="/inventory/purchase-bills"><a class="nav-link">Purchase Bills</a></li>
-                <li class="nav-item" routerLink="/inventory/material-issue"><a class="nav-link">Material Issue</a></li>
+                <li class="nav-item" routerLink="/inventory/asset-allocation"><a class="nav-link">Asset Allocation</a></li>
+                <li class="nav-item" routerLink="/inventory/asset-transfer"><a class="nav-link">Asset Transfer</a></li>
+                <li class="nav-item" routerLink="/inventory/asset-return"><a class="nav-link">Asset Return</a></li>
+                <li class="nav-item" routerLink="/inventory/asset-maintenance"><a class="nav-link">Asset Maintenance</a></li>
+                <li class="nav-item" routerLink="/inventory/asset-damage"><a class="nav-link">Asset Damage</a></li>
+                <li class="nav-item" routerLink="/inventory/asset-disposal"><a class="nav-link">Asset Disposal</a></li>
+                <li class="nav-item" routerLink="/inventory/asset-location"><a class="nav-link">Asset Location</a></li>
+                <li class="nav-item" routerLink="/inventory/recepient-master"><a class="nav-link">Recepient Master</a></li>                <li class="nav-item" hidden routerLink="/inventory/purchase-bills"><a class="nav-link">Purchase Bills</a></li>
+                <li class="nav-item" hidden routerLink="/inventory/material-issue"><a class="nav-link">Material Issue</a></li>
               </ul>
             </div>
           </li>
@@ -99,12 +136,14 @@
             </span>
             <div class="collapse" [ngClass]="{'show': isSubmenuOpen('inventory')}">
               <ul class="nav flex-column wlt-c-furg-sub-menu">
-                <li class="nav-item" routerLink="/inventory/report/hq-stock-ledger"><a class="nav-link">HQ Stock
-                    Ledger</a>
-                </li>
-                <li class="nav-item" routerLink="/inventory/report/branch-stock-ledger"><a class="nav-link">Branch
-                    Stock
-                    Ledger</a></li>
+                <!-- TEMP HIDDEN: HQ Stock Ledger & Branch Stock Ledger -->
+                <!-- <li class="nav-item" routerLink="/inventory/report/hq-stock-ledger"><a class="nav-link">HQ Stock Ledger</a></li> -->
+                <!-- <li class="nav-item" routerLink="/inventory/report/branch-stock-ledger"><a class="nav-link">Branch Stock Ledger</a></li> -->
+                <li class="nav-item" routerLink="/inventory/report/stock-ledger-report"><a class="nav-link">Stock Ledger Report</a></li>
+                <li class="nav-item" routerLink="/inventory/stock-ledger"><a class="nav-link">Stock Ledger</a></li>
+                <li class="nav-item" routerLink="/inventory/stock-balance-summary"><a class="nav-link">Stock Balance Summary</a></li>
+                <li class="nav-item" routerLink="/inventory/employee-item-holding"><a class="nav-link">Staff Item Holding</a></li>
+                <li class="nav-item" routerLink="/inventory/employee-issue-register"><a class="nav-link">Staff Issue Register</a></li>
               </ul>
             </div>
           </li>
@@ -245,6 +284,7 @@
                 <li class="nav-item" routerLink="/payroll/search-employee-loan"><a class="nav-link">Employee Loan</a></li>
                 <li class="nav-item" routerLink="/payroll/search-employee-uniform-loan"><a class="nav-link">Employee
                     Uniform Loan</a></li>
+                <li class="nav-item" routerLink="/payroll/uniform-loan-stock-link"><a class="nav-link">Uniform Loan Stock Issues</a></li>
                 <li class="nav-item" routerLink="/payroll/new-attendance"><a class="nav-link">Attendance</a></li>
                 <li class="nav-item" routerLink="/payroll/attendance-display"><a class="nav-link">Attendance Display</a></li>
                 <li class="nav-item" routerLink="/payroll/misc-transactions"><a class="nav-link">Misc Transactions </a>
@@ -367,6 +407,17 @@
                 <li class="nav-item" routerLink="/administration/bank-master"><a class="nav-link">Bank Master</a></li>
                 <li class="nav-item" routerLink="/administration/cheque-master"><a class="nav-link">Cheque Master</a>
                 </li>
+                <li class="nav-item" routerLink="/administration/approval-setup"><a class="nav-link">Approval Setup</a>
+                </li>
+                <!-- Approval Workflow + Notifications -->
+                <li class="nav-item">
+                  <span class="reportHeader">
+                    <a class="nav-link collapsed reportHeader">Approvals &amp; Notifications</a>
+                  </span>
+                </li>
+                <li class="nav-item" routerLink="/administration/pending-approvals"><a class="nav-link">Pending Approvals</a></li>
+                <li class="nav-item" routerLink="/administration/approval-history"><a class="nav-link">Approval History</a></li>
+                <li class="nav-item" routerLink="/administration/notifications"><a class="nav-link">Notifications</a></li>
               </ul>
             </div>
           </li>

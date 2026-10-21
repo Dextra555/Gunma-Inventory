@@ -1,124 +1,118 @@
-<div class="ggf-page">
-
-  <!-- LEFT — brand panel -->
-  <div class="ggf-brand-panel">
-    <div class="ggf-pattern"></div>
-    <svg class="ggf-ghost-shield ggf-ghost1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 5 L90 20 L90 55 Q90 85 50 98 Q10 85 10 55 L10 20 Z" fill="none" stroke="#d4af37" stroke-width="2"/>
-    </svg>
-    <svg class="ggf-ghost-shield ggf-ghost2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 5 L90 20 L90 55 Q90 85 50 98 Q10 85 10 55 L10 20 Z" fill="none" stroke="#d4af37" stroke-width="2"/>
-    </svg>
-    <div class="ggf-seam"></div>
-    <div class="ggf-brand-content">
-      <img class="ggf-crest" src="assets/img/GunmaGuardForce.png" alt="Gunma GuardForce crest">
-      <div class="ggf-brand">GUNMA <span class="ggf-accent">GUARDFORCE</span>
-        <span class="ggf-est">DS Sdn Bhd &nbsp;·&nbsp; Since 1999</span>
-      </div>
-      <div class="ggf-rule"></div>
-      <div class="ggf-tagline"><span class="ggf-hi">Online Guard</span> Management System</div>
-    </div>
-  </div>
-
-  <!-- RIGHT — registration card -->
-  <div class="ggf-form-panel ggf-form-panel--tall">
-    <div class="ggf-card ggf-card--wide">
-
-      <!-- breadcrumb -->
-      <ol class="ggf-breadcrumb">
-        <li><a routerLink="/dashboard">Administrator</a></li>
-        <li><a routerLink="/administration/user-registration">User List</a></li>
-      </ol>
-
-      <div class="ggf-welcome">
-        {{ registerTitle == 'new' ? 'New User Registration' : 'Edit User Registration' }}<span class="ggf-dot">.</span>
-      </div>
-      <div class="ggf-welcome-sub">
-        {{ registerTitle == 'new' ? 'Please sign up for your account' : 'Please edit your account details' }}
-      </div>
-
-      <form [formGroup]="registerForm" (ngSubmit)="saveUser()">
-
-        <mat-form-field appearance="outline" class="ggf-mat-field">
-          <mat-label>Username</mat-label>
-          <input type="text" formControlName="Name" matInput placeholder="username">
-          <mat-icon matSuffix>person</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="ggf-mat-field">
-          <mat-label>Password</mat-label>
-          <input type="{{ hidePassword ? 'password' : 'text' }}" formControlName="Password" matInput placeholder="password">
-          <mat-icon matSuffix (click)="togglePasswordVisibility()">
-            {{ hidePassword ? 'visibility' : 'visibility_off' }}
-          </mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="ggf-mat-field">
-          <mat-label>Confirm Password</mat-label>
-          <input type="{{ hidePassword ? 'password' : 'text' }}" formControlName="ConfirmPassword" matInput placeholder="Confirm Password">
-          <mat-icon matSuffix (click)="togglePasswordVisibility()">
-            {{ hidePassword ? 'visibility' : 'visibility_off' }}
-          </mat-icon>
-        </mat-form-field>
-
-        <div *ngIf="registerForm.hasError('passwordMismatch')" class="error-message">
-          Passwords do not match.
+<div class="container-fluid wlt-c-furg-login-page d-flex justify-content-center flex-column align-item-center">
+  <div class="row">
+    <div class="d-none d-md-block col-sm-6 col-md-6 col-lg-7 p-0">
+      <div class="wlt-c-furg-login-left">
+        <div class="wlt-c-furg-loginbox d-flex justify-content-center flex-column align-item-center">
+          <div class="px-5 pt-3 pb-5">
+            <div class="wlt-c-furg-logo text-left">
+              <!-- <img src="assets/img/logo-white.png" alt="" /> -->
+              <img src="assets/img/logo-sample.png" alt="" />
+            </div>
+            <div class="wlt-c-furg-login">
+              <h1>Online Branch<br /> Management System</h1>
+            </div>
+          </div>
         </div>
-
-        <mat-form-field appearance="outline" class="ggf-mat-field">
-          <mat-label>Designation</mat-label>
-          <input type="text" formControlName="Designation" matInput placeholder="">
-          <mat-icon matSuffix>work</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="ggf-mat-field">
-          <mat-label>Contact Number</mat-label>
-          <input type="text" formControlName="ContactNo" matInput placeholder="">
-          <mat-icon matSuffix>phone</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="ggf-mat-field">
-          <mat-label>Email</mat-label>
-          <input type="text" formControlName="Email" matInput placeholder="Email"
-            pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
-          <mat-error *ngIf="registerForm.get('email')?.hasError('pattern')">Invalid email address</mat-error>
-          <mat-icon matSuffix>email</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="ggf-mat-field">
-          <mat-label>User Type</mat-label>
-          <mat-select formControlName="IsAdmin">
-            <mat-option value="2">Superadmin</mat-option>
-            <mat-option value="1">Admin</mat-option>
-            <mat-option value="0">User</mat-option>
-          </mat-select>
-          <mat-icon matSuffix>person</mat-icon>
-        </mat-form-field>
-
-        <button
-          *ngIf="this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
-          mat-button type="submit"
-          class="ggf-login-btn mb-3"
-          [disabled]="registerForm.invalid">
-          Register
-        </button>
-
-        <div class="text-center pt-3" style="font-size:13px; color:#8a8a99;">
-          Already have account?&nbsp;<a routerLink="/login" style="color:#b6902f;">Login</a>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-5 p-0">
+      <div class="wlt-c-furg-login-right">
+        <div class="wlt-c-furg-login-form">
+          <div class="row">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-10 my-1">
+            <ol class="breadcrumb float-md-center">
+              <li class="breadcrumb-item"><a routerLink="/dashboard">Administrator</a></li>
+              <li class="breadcrumb-item"><a routerLink="/administration/user-registration">User List</a></li>
+            </ol>
+          </div>
         </div>
+        <div class="row">
+          <div class="wlt-c-furg-welcome text-center">
+            <h3>{{registerTitle == 'new'?'New User Registration!': 'Edit User Registration!'}}</h3>
+            <p>{{registerTitle == 'new'?'Please Sign Up for your Account': 'Please Edit your Account Details'}}</p>
+          </div>
+        </div>
+          <form [formGroup]="registerForm" (ngSubmit)="saveUser()">
+            <mat-form-field appearance="outline">
+              <mat-label>Username</mat-label>
+              <input type="text" formControlName="Name" matInput placeholder="username">
+              <mat-icon matSuffix>person</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input type="{{ hidePassword ? 'password' : 'text' }}" formControlName="Password" matInput
+                placeholder="password">
+              <mat-icon matSuffix (click)="togglePasswordVisibility()">{{ hidePassword ? 'visibility' : 'visibility_off'
+                }}</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Confirm Password</mat-label>
+              <input type="{{ hidePassword ? 'password' : 'text' }}" formControlName="ConfirmPassword" matInput
+                placeholder="Confirm Password">
+              <mat-icon matSuffix (click)="togglePasswordVisibility()">{{ hidePassword ? 'visibility' : 'visibility_off'
+                }}</mat-icon>
+            </mat-form-field>
 
-      </form>
-
-      <div class="ggf-foot">© 2026 Gunma GuardForce DS Sdn Bhd</div>
+            <!-- Display an error message if passwords don't match -->
+            <div *ngIf="registerForm.hasError('passwordMismatch')" class="error-message">
+              Passwords do not match.
+            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>Designation</mat-label>
+              <input type="text" formControlName="Designation" matInput placeholder="">
+              <mat-icon matSuffix>work</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Contact Number</mat-label>
+              <input type="text" formControlName="ContactNo" matInput placeholder="">
+              <mat-icon matSuffix>phone</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input type="text" formControlName="Email" matInput placeholder="Email"
+                pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
+              <mat-error *ngIf="registerForm.get('email')?.hasError('pattern')">Invalid email address</mat-error>
+              <mat-icon matSuffix>email</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>User Type</mat-label>
+              <mat-select formControlName="IsAdmin">
+                <mat-option value="2">Superadmin</mat-option>
+                <mat-option value="1">Admin</mat-option>
+                <mat-option value="0">User</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>person</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Department</mat-label>
+              <mat-select formControlName="Department">
+                <mat-option value="">— None —</mat-option>
+                <mat-option value="Purchase">Purchase</mat-option>
+                <mat-option value="Finance">Finance</mat-option>
+                <mat-option value="HR">HR</mat-option>
+                <mat-option value="Operations">Operations</mat-option>
+                <mat-option value="Other">Other</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>business</mat-icon>
+            </mat-form-field>
+            <button *ngIf="this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser == 'superadmin'" mat-button class="btn btn-block wlt-c-furg-btn-primary mb-3"
+              [disabled]="registerForm.invalid">Register</button>
+            <div class="text-center pt-4 text-muted">Already have account?<a id="forget" routerLink="/login">Login</a>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Loading spinner -->
-  <div [style.display]="showLoadingSpinner ? 'block' : 'none'"
-    style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;">
-    <div class="d-flex justify-content-center">
-      <span class="loader"></span>
+    <!-- model pop up for logic started -->
+
+    <div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+      style="margin-top: -20.5rem; display: block; margin-left: 55.5rem;">
+      <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+      </div>
     </div>
-  </div>
+    <!-- model pop up for logic ended -->
 
+  </div>
 </div>

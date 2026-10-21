@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Gunma Guard Force - e-Security Management System';
+  title = 'e-Security Management System';
 }

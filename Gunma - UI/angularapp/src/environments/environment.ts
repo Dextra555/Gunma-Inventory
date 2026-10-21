@@ -35,8 +35,8 @@ export const environment = {
 
   //Local IIS Serverconfiguration
   //IIS Server configuration
-  baseUrl: 'http://localhost:16787/api/',
-  baseReportUrl: 'http://localhost:58008/',
+  baseUrl: 'http://localhost:5003/api/',
+  baseReportUrl: 'http://localhost:8080/',
 };
 
 export const TAX = {

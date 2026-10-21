@@ -1,83 +1,70 @@
-<div class="ggf-page">
-
-  <!-- LEFT — brand panel -->
-  <div class="ggf-brand-panel">
-    <div class="ggf-pattern"></div>
-    <!-- ghost shield 1 -->
-    <svg class="ggf-ghost-shield ggf-ghost1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 5 L90 20 L90 55 Q90 85 50 98 Q10 85 10 55 L10 20 Z" fill="none" stroke="#d4af37" stroke-width="2"/>
-    </svg>
-    <!-- ghost shield 2 -->
-    <svg class="ggf-ghost-shield ggf-ghost2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 5 L90 20 L90 55 Q90 85 50 98 Q10 85 10 55 L10 20 Z" fill="none" stroke="#d4af37" stroke-width="2"/>
-    </svg>
-    <div class="ggf-seam"></div>
-    <div class="ggf-brand-content">
-      <img class="ggf-crest" src="assets/img/GunmaGuardForce-removebg.png" alt="Gunma GuardForce crest">
-      <div class="ggf-brand">GUNMA <span class="ggf-accent">GUARDFORCE</span>
-        <span class="ggf-est">DS Sdn Bhd &nbsp;·&nbsp; Since 1999</span>
+<div class="container-fluid wlt-c-furg-login-page d-flex justify-content-center flex-column align-item-center">
+  <div class="row">
+    <div class="d-none d-md-block col-sm-6 col-md-6 col-lg-7 p-0">
+      <div class="wlt-c-furg-login-left">
+        <div class="wlt-c-furg-loginbox d-flex justify-content-center flex-column align-item-center">
+          <div class="px-5 pt-3 pb-5">
+            <div class="wlt-c-furg-logo text-left">
+              <!-- Gunma Guard Force logo -->
+              <img src="assets/img/GunmaGuardForce-removebg.png" alt="Gunma Guard Force" />
+            </div>
+            <div class="wlt-c-furg-login">
+              <h1>Online Branch<br /> Management System</h1>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="ggf-rule"></div>
-      <div class="ggf-tagline"><span class="ggf-hi">Online Guard</span> Management System</div>
     </div>
-  </div>
+    <div class="col-sm-6 col-md-6 col-lg-5 p-0">
+      <div class="wlt-c-furg-login-right">
+        <div class="wlt-c-furg-login-form">
+          <div class="wlt-c-furg-welcome text-center">
+            <h3>Welcome Back!</h3>
+            <p>Please sign in to your Account</p>
+          </div>
+          <form [formGroup]="loginForm" (ngSubmit)="validateUser()">
+            <div *ngIf="showPasswordExpiryWarning == true" class="warning-panel" style="height: 100px; width: 100%;">
+              <span>{{ warningMsg }}</span>
+              <button class="action-button" (click)="onYesClick()">Yes</button>
+              <button class="action-button" (click)="onNoClick()">No</button>
+            </div>
+            <br />
+            <mat-form-field appearance="outline">
+              <mat-label>Username</mat-label>
+              <input type="text" formControlName="userName" matInput placeholder="">
+              <mat-icon matSuffix>person</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input type="password" formControlName="password" matInput placeholder="">
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
 
-  <!-- RIGHT — login card -->
-  <div class="ggf-form-panel">
-    <div class="ggf-card">
-      <div class="ggf-welcome">Welcome Back<span class="ggf-dot">.</span></div>
-      <div class="ggf-welcome-sub">Sign in to your GuardForce account</div>
-
-      <form [formGroup]="loginForm" (ngSubmit)="validateUser()">
-
-        <!-- Password expiry warning panel -->
-        <div *ngIf="showPasswordExpiryWarning == true" class="warning-panel" style="height:100px;width:100%;margin-top:16px;">
-          <span>{{ warningMsg }}</span>
-          <button class="action-button" type="button" (click)="onYesClick()">Yes</button>
-          <button class="action-button" type="button" (click)="onNoClick()">No</button>
+            <button mat-button class="btn btn-block wlt-c-furg-btn-primary mb-3"
+              [disabled]="loginForm.invalid">Login</button>
+            <div *ngIf="userName == 'admin' || userName == 'superadmin'" class="text-center pt-4 text-muted">Don't have
+              account?<a id="forget" routerLink="/register">Sign
+                Up</a></div>
+            <div *ngIf="warningMessage !==''">
+              <mat-label style="color:red">{{warningMessage}}</mat-label>
+            </div>
+            <div *ngIf="errorMessage !==''">
+              <mat-label style="color:red">{{errorMessage}}</mat-label>
+            </div>
+          </form>
         </div>
-
-        <!-- Username field -->
-        <div class="ggf-field">
-          <input type="text" formControlName="userName" placeholder="Username *" autocomplete="username">
-          <svg class="ggf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-          </svg>
-        </div>
-
-        <!-- Password field -->
-        <div class="ggf-field">
-          <input type="password" formControlName="password" placeholder="Password *" autocomplete="current-password">
-          <svg class="ggf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="4" y="10" width="16" height="10" rx="2"/>
-            <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
-          </svg>
-        </div>
-
-        <button type="submit" class="ggf-login-btn" [disabled]="loginForm.invalid">LOGIN</button>
-
-        <div *ngIf="userName == 'admin' || userName == 'superadmin'" class="text-center pt-3 text-muted" style="font-size:13px;">
-          Don't have account?&nbsp;<a routerLink="/register">Sign Up</a>
-        </div>
-        <div *ngIf="warningMessage !== ''">
-          <span style="color:red;font-size:13px;">{{warningMessage}}</span>
-        </div>
-        <div *ngIf="errorMessage !== ''">
-          <span style="color:red;font-size:13px;">{{errorMessage}}</span>
-        </div>
-      </form>
-
-      <div class="ggf-foot">© 2026 Gunma GuardForce DS Sdn Bhd</div>
+      </div>
     </div>
-  </div>
 
-  <!-- Loading spinner -->
-  <div [style.display]="showLoadingSpinner ? 'block' : 'none'"
-    style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;">
-    <div class="d-flex justify-content-center">
-      <span class="loader"></span>
+    <!-- model pop up for logic started -->
+
+    <div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+      style="margin-top: -20.5rem; display: block; margin-left: 55.5rem;">
+      <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+      </div>
     </div>
-  </div>
+    <!-- model pop up for logic ended -->
 
+  </div>
 </div>

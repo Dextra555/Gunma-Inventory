@@ -21,6 +21,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
+              "crypto-js",
               "@boldreports/javascript-reporting-controls/Scripts/bold.report-viewer.min",
               "@boldreports/javascript-reporting-controls/Scripts/data-visualization/ej.bulletgraph.min",
               "@boldreports/javascript-reporting-controls/Scripts/data-visualization/ej.chart.min"
